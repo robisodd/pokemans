@@ -1,0 +1,29 @@
+{
+    "author": "robisodd",
+    "dependencies": {},
+    "keywords": [],
+    "name": "pokemans",
+    "pebble": {
+        "capabilities": [
+            "configurable"
+        ],
+        "displayName": "pokemans",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "chalk"
+        ],
+        "uuid": "0b819cad-9cc1-422b-9b93-114a316bec0e",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "0.3.0"
+}
