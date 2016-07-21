@@ -175,3 +175,53 @@ function log_in_via_google(user, pass) {
   });
 }
 
+
+// ------------------------------------------------------------------------------------------------------------------------ //
+//  PTC Login Functions
+//    Current doesn't work since cookies aren't saved.
+//    For more info: https://github.com/pebble/pebblejs/issues/76
+// ------------------------------------------------------------------------------------------------------------------------ //
+var API_URL     = 'https://pgorelease.nianticlabs.com/plfe/rpc';
+var LOGIN_URL     = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize';
+var LOGIN_OAUTH = 'https://sso.pokemon.com/sso/oauth2.0/accessToken';
+
+function log_in_via_ptc(username, password) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange=function() {
+    console.log("xhr readystate: " + xhr.readyState + " status: " + xhr.status);
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      console.log("xhr response text = " + xhr.responseText);
+      var jdata = JSON.parse(xhr.responseText);
+      console.log("jdata = " + JSON.stringify(jdata));
+      
+      var xhr2 = new XMLHttpRequest();
+      xhr2.onreadystatechange=function() {
+        console.log("xhr2 readystate: " + xhr2.readyState + " status: " + xhr2.status);
+        if (xhr2.readyState == 4 && xhr2.status == 200) {
+          console.log("xhr2 response text = " + xhr2.responseText);
+        } else {
+          try {
+            console.log("xhr2 allofit: " + JSON.stringify(xhr2));
+            console.log("All Response Headers = " + xhr2.getAllResponseHeaders());
+            console.log("response url = " + xhr2.responseURL);
+            console.log("response header = " + xhr2.getResponseHeader('Location'));
+          } catch (e) {}
+        }
+      };
+      
+      var thedata = 'lt=' + jdata.lt + "&execution=" + jdata.execution + "&_eventId=submit&username=" + username + "&password=" + password;
+      console.log("Going to URL: " + LOGIN_URL + "?" + thedata);
+      xhr2.open("POST", LOGIN_URL, true);
+      xhr2.send(thedata);
+      
+      //var DIRECT_URL = 'https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize&lt=' + jdata.lt + "&execution=" + jdata.execution + "&_eventId=submit&username=" + username + "&password=" + password;
+      //console.log("Going to URL: " + DIRECT_URL);
+      //xhr2.open("POST", DIRECT_URL, true);
+      //xhr2.send();
+    }
+  };
+  
+  xhr.open("GET", LOGIN_URL, true);
+  //xhr.setRequestHeader('User-Agent','niantic');  // <-- Fails
+  xhr.send();
+}
